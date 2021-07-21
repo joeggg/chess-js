@@ -1,0 +1,14 @@
+{
+  "name": "chess",
+  "version": "1.0.0",
+  "description": "JavaScript Chess game for use in a Discord bot",
+  "main": "app/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joe Gardner",
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^7.30.0"
+  }
+}

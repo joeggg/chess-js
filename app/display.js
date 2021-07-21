@@ -55,9 +55,7 @@ function createLayer(y) {
         for (let x = 0; x < NUM_SQUARES; x++) {
             if (i === 0) {
                 // Draw square coordinates if on first layer
-                output += `
-                    ${index_to_str.X_MAP(x)}${index_to_str.Y_MAP(y)}${' '.repeat(SQUARE_WIDTH-2)}|
-                `;
+                output += `${index_to_str.X_MAP(x)}${index_to_str.Y_MAP(y)}${' '.repeat(SQUARE_WIDTH-2)}|`;
             } else if (i === 1) {
                 // Draw piece if in centre
                 output += `   ${board[y][x].symbol}   |`;

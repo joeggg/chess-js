@@ -1,5 +1,5 @@
 'use strict';
-const { BOARD } = require('../util/mappings');
+const { str_to_index } = require('../util/mappings');
 const { getBoard, setBoard } = require('../util/board');
 
 /**
@@ -25,8 +25,8 @@ class GenericPiece {
     setCoords(coords) {
         const [letter, number] = coords.split('');
         // Map the letter/num coordinate to array indices
-        let x = BOARD.X_MAP(letter);
-        let y = BOARD.Y_MAP(number);
+        let x = str_to_index.X_MAP(letter);
+        let y = str_to_index.Y_MAP(number);
         if (this.moveAllowed(x, y)) {
             // Swap input/output coords so starting coord isn't lost when updating piece's coords
             [this._x, x] = [x, this._x];

@@ -6,6 +6,7 @@ class King extends GenericPiece {
         super(x, y, colour);
         this.symbol = this.colour === 'Black' ? '\u2654' : '\u265A';
         this.name = 'king';
+        this.firstMove = true;
     }
 
     moveAllowed(x, y) {
@@ -13,7 +14,7 @@ class King extends GenericPiece {
             return false;
         }
         // King can only move to adjacent squares
-        if (x-this._x <=1 && y-this._y <= 1) {
+        if (Math.abs(x-this._x) <=1 &&Math.abs(y-this._y) <= 1) {
             return true;
         }
         return false;

@@ -14,7 +14,7 @@ async function run() {
     while (true) {
         try {
             await player.turn('White');
-            await player.turn('Black');
+            // await player.turn('Black');
         } catch(err) {
             console.log(err.stack);
         }

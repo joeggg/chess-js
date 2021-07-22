@@ -10,7 +10,6 @@ class GenericPiece {
         this._x = x;
         this._y = y;
         this._letter = 
-        this.symbol = (colour === 'White') ? '`' : '*';
         this.colour = colour;
     }
 

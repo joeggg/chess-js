@@ -37,6 +37,17 @@ function setBoard({x, y}) {
 }
 
 /**
+ * Applies a castling move to the board, assumes path has been checked
+ */
+function setCastle(rook_x, y) {
+    const k =  (rook_x === 0) ? 1 : -1;
+    const king_x = 4;
+    // Swap the empty spaces with the rook and king
+    [board[y][rook_x+k], board[y][king_x]] = [board[y][king_x], board[y][rook_x+k]];
+    [board[y][rook_x+2*k], board[y][rook_x]] = [board[y][rook_x], board[y][rook_x+2*k]];
+}
+
+/**
  * Print current stored notification to console if there is one
  */
 function showNotification () {
@@ -58,4 +69,5 @@ module.exports = {
     setNotification: setNotification,
     getBoard: getBoard,
     setBoard: setBoard,
+    setCastle: setCastle,
 };

@@ -1,13 +1,36 @@
 'use strict';
 const { GenericPiece } = require('./piece');
-const { getBoard } = require('../util/board');
+const { getBoard, setCastle } = require('../util/board');
 const { Empty } = require('./empty');
+const { King } = require('./king');
 
 class Rook extends GenericPiece {
     constructor(x, y, colour) {
         super(x, y, colour);
         this.symbol = this.colour === 'Black' ? '\u2656' : '\u265C';
         this.name = 'rook';
+        this.firstMove = true;
+    }
+
+    castle() {
+        if (this.firstMove) {
+            const king = getBoard({x: 4, y: this._y});
+            console.log(king);
+            if (king instanceof King && king.firstMove) {
+                const k = (this._x === 0) ? 1 : -1; 
+                for (let ptr = k*this._x+1; ptr < k*king._x; ptr++) {
+                    if (!(getBoard({x: Math.abs(ptr), y: this._y}) instanceof Empty)) {
+                        throw new Error('Cannot castle');
+                    }
+                }
+                this._x = this._x + 2*k;
+                king._x = this._x + k;
+                setCastle(this._x, this._y);
+                this.firstMove = false;
+                return;
+            }
+        }
+        throw new Error('Cannot castle');
     }
 
     moveAllowed(x, y) {
@@ -18,12 +41,14 @@ class Rook extends GenericPiece {
         if (x !== this._x) {
             if (y === this._y) {
                 if (this.pathClear(x, y, true)) {
+                    this.firstMove = false;
                     return true;
                 }
             }
         } else {
             if (y !== this._y) {
                 if (this.pathClear(x, y, false)) {
+                    this.firstMove = false;
                     return true;
                 }
             }

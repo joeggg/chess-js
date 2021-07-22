@@ -2,6 +2,7 @@
 const readline = require('readline');
 
 const display = require('./display');
+const { Rook } = require('./pieces/rook');
 const { getBoard } = require('./util/board');
 
 const reader = readline.createInterface({
@@ -27,8 +28,17 @@ async function turn(player) {
             const move = await askPlayer(player);
             const piece = getBoard(move[0]);
             if (piece.colour === player) {
-                // Check the piece can move there and set its position
-                piece.setCoords(move[1], player);
+                // Handle castling
+                if (move[1] === 'castle') {
+                    if (piece instanceof Rook) {
+                        piece.castle();
+                    } else {
+                        throw new Error('Piece not a rook');
+                    }
+                } else {
+                    // Check the piece can move there and set its position
+                    piece.setCoords(move[1], player);
+                }
                 display.drawBoard();
                 waiting = false;
             } else {
@@ -50,13 +60,14 @@ async function turn(player) {
 async function askPlayer(player) {
     return new Promise((res, rej) => {
         reader.question(`${player}'s turn:\n`, move => {
-            if (move.length === 5) {
-                try {
-                    res(move.split(' '));
-                } catch {
+            try {
+                const [from, to] = move.split(' ');
+                if (from.length === 2 && (to.length === 2 || to === 'castle')) {
+                    res([from, to]);
+                } else {
                     rej(new Error('Invalid move'));
                 }
-            } else {
+            } catch {
                 rej(new Error('Invalid move'));
             }
         });

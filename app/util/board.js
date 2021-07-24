@@ -4,6 +4,10 @@ const { str_to_index } = require('./mappings');
 
 let board = [];
 let notification = '';
+let pieces = {
+    White: [],
+    Black: []
+};
 
 /**
  * Returns the piece object at an input letter coordinate
@@ -48,6 +52,23 @@ function setCastle(rook_x, y) {
 }
 
 /**
+ * Returns an array of all the piece objects of an input colour
+ * 
+ * @param {string} colour 
+ */
+function getPieces(colour) {
+    return pieces[colour];
+}
+
+/**
+ * Sets up the piece arrays for check
+ */
+function setPieces() {
+    pieces.White = board[7].concat(board[6]);
+    pieces.Black = board[0].concat(board[1]);
+}
+
+/**
  * Print current stored notification to console if there is one
  */
 function showNotification () {
@@ -70,4 +91,6 @@ module.exports = {
     getBoard: getBoard,
     setBoard: setBoard,
     setCastle: setCastle,
+    getPieces: getPieces,
+    setPieces: setPieces,
 };

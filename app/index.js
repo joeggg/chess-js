@@ -16,7 +16,8 @@ async function run() {
             await player.turn('White');
             // await player.turn('Black');
         } catch(err) {
-            console.log(err.stack);
+            console.log(`${err.message}\nGame Over!`);
+            break;
         }
     }
 }

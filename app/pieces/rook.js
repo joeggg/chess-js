@@ -9,7 +9,6 @@ class Rook extends GenericPiece {
         super(x, y, colour);
         this.symbol = this.colour === 'Black' ? '\u2656' : '\u265C';
         this.name = 'rook';
-        this.firstMove = true;
     }
 
     castle() {
@@ -41,14 +40,12 @@ class Rook extends GenericPiece {
         if (x !== this._x) {
             if (y === this._y) {
                 if (this.pathClear(x, y, true)) {
-                    this.firstMove = false;
                     return true;
                 }
             }
         } else {
             if (y !== this._y) {
                 if (this.pathClear(x, y, false)) {
-                    this.firstMove = false;
                     return true;
                 }
             }

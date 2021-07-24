@@ -8,6 +8,8 @@ let pieces = {
     White: [],
     Black: []
 };
+// For undoing a move if check
+let mem = {coords: {}, pieces: {}};
 
 /**
  * Returns the piece object at an input letter coordinate
@@ -29,7 +31,10 @@ function getBoard(coord) {
  * @param {Object} coord 
  */
 function setBoard({x, y}) {
+    mem.coords = {x, y};
+    mem.pieces.from = board[y.from][x.from];
     const space = board[y.to][x.to];
+    mem.pieces.to = space;
     board[y.to][x.to] = board[y.from][x.from];
 
     if (space instanceof Empty) {
@@ -38,6 +43,17 @@ function setBoard({x, y}) {
         setNotification(`${space.colour}'s ${space.name} was taken`);
         board[y.from][x.from] = new Empty();
     }
+}
+
+function undoSetBoard() {
+    const x = mem.coords.x;
+    const y = mem.coords.y;
+    board[y.from][x.from] = mem.pieces.from;
+    board[y.to][x.to] = mem.pieces.to;
+    board[y.from][x.from]._x = x.from;
+    board[y.from][x.from]._y = y.from;
+    board[y.to][x.to]._x = x.to;
+    board[y.to][x.to]._y = y.to;  
 }
 
 /**
@@ -90,6 +106,7 @@ module.exports = {
     setNotification: setNotification,
     getBoard: getBoard,
     setBoard: setBoard,
+    undoSetBoard: undoSetBoard,
     setCastle: setCastle,
     getPieces: getPieces,
     setPieces: setPieces,

@@ -7,7 +7,6 @@ class King extends GenericPiece {
         super(x, y, colour);
         this.symbol = this.colour === 'Black' ? '\u2654' : '\u265A';
         this.name = 'king';
-        this.firstMove = true;
     }
 
     check(x=this._x, y=this._y) {

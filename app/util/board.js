@@ -10,6 +10,7 @@ let pieces = {
 };
 // For undoing a move if check
 let mem = {coords: {}, pieces: {}};
+let currentChecking = null;
 
 /**
  * Returns the piece object at an input letter coordinate
@@ -41,6 +42,7 @@ function setBoard({x, y}) {
         board[y.from][x.from] = space;
     } else {
         setNotification(`${space.colour}'s ${space.name} was taken`);
+        space.alive = false;
         board[y.from][x.from] = new Empty();
     }
 }
@@ -53,7 +55,8 @@ function undoSetBoard() {
     board[y.from][x.from]._x = x.from;
     board[y.from][x.from]._y = y.from;
     board[y.to][x.to]._x = x.to;
-    board[y.to][x.to]._y = y.to;  
+    board[y.to][x.to]._y = y.to;
+    board[y.to][x.to].alive = true;
 }
 
 /**
@@ -80,8 +83,16 @@ function getPieces(colour) {
  * Sets up the piece arrays for check
  */
 function setPieces() {
-    pieces.White = board[7].concat(board[6]);
-    pieces.Black = board[0].concat(board[1]);
+    pieces.White = [...board[7], ...board[6]];
+    pieces.Black = [...board[0], ...board[1]];
+}
+
+function getChecking() {
+    return currentChecking;
+}
+
+function setChecking(piece) {
+    currentChecking = piece;
 }
 
 /**
@@ -110,4 +121,6 @@ module.exports = {
     setCastle: setCastle,
     getPieces: getPieces,
     setPieces: setPieces,
+    getChecking: getChecking,
+    setChecking: setChecking,
 };

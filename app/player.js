@@ -2,9 +2,9 @@
 const readline = require('readline');
 
 const display = require('./display');
-const { King } = require('./pieces/king');
+const { Empty } = require('./pieces/empty');
 const { Rook } = require('./pieces/rook');
-const { getBoard, getPieces } = require('./util/board');
+const { getBoard, getPieces, setChecking } = require('./util/board');
 
 const reader = readline.createInterface({
     input: process.stdin,
@@ -28,15 +28,12 @@ let check = {
  */
 async function turn(player) {
     let waiting = true;
+    let piece = null;
     while (waiting) {
         try {
             const move = await askPlayer(player);
-            const piece = getBoard(move[0]);
+            piece = getBoard(move[0]);
             if (piece.colour === player) {
-                // Handle in check
-                if (!(piece instanceof King) && getPieces(player)[4].check()) {
-                    throw new Error('You\'re in check');
-                }
                 // Handle castling
                 if (move[1] === 'castle') {
                     if (piece instanceof Rook) {
@@ -44,7 +41,9 @@ async function turn(player) {
                     } else {
                         throw new Error('Piece not a rook');
                     }
-                } else {
+                } 
+                // Handle regular move
+                else {
                     // Check the piece can move there and set its position
                     piece.setCoords(move[1], player);
                 }
@@ -57,7 +56,7 @@ async function turn(player) {
             console.log(err.message);
         }
     }
-    handleChecks(player);
+    handleChecks(player, piece);
 }
 
 /**
@@ -87,10 +86,11 @@ async function askPlayer(player) {
 /**
  * Checks for the changing of a check status this move
  */
-function handleChecks(player) {
+function handleChecks(player, piece) {
     // Handle new check on enemy
-    const enemyColour = player === 'White' ? 'Black' : 'White';
+    const enemyColour = piece.enemyColour;
     if (getPieces(enemyColour)[4].check()) {    // 4 = king
+        setChecking(piece);
         if (getPieces(enemyColour)[4].checkmate()) {
             throw new Error(`Checkmate ${enemyColour}!`);
         }

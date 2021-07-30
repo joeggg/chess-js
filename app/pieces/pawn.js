@@ -8,7 +8,6 @@ class Pawn extends GenericPiece {
         super(x, y, colour);
         this.symbol = this.colour === 'Black' ? '\u2659' : '\u265F';
         this.name = 'pawn';
-        this.firstMove = true;
     }
 
     moveAllowed(x, y) {
@@ -17,7 +16,6 @@ class Pawn extends GenericPiece {
         }
         // Check if piece is being taken
         if (this.takingPiece(x, y)) {
-            this.firstMove = false;
             return true;
         }
         // Pawn can only move to one square forward (or 2 on first move)
@@ -25,14 +23,12 @@ class Pawn extends GenericPiece {
         if (this.colour === 'White') {
             if (this._y-y <= range && this._y-y > 0 && x === this._x) {
                 if (this.pathClear(x, y)) {
-                    this.firstMove = false;
                     return true;
                 }
             }
         } else {
             if (y-this._y <= range && y-this._y > 0 && x === this._x) {
                 if (this.pathClear(x, y)) {
-                    this.firstMove = false;
                     return true;
                 }
             }

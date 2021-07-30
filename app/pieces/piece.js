@@ -1,6 +1,6 @@
 'use strict';
 const { str_to_index } = require('../util/mappings');
-const { getBoard, setBoard, undoSetBoard } = require('../util/board');
+const { getBoard, setBoard, undoSetBoard, getPieces } = require('../util/board');
 
 /**
  * Generic piece class containing the base functionality required for every piece
@@ -11,7 +11,9 @@ class GenericPiece {
         this._y = y;
         this._letter = 
         this.colour = colour;
+        this.enemyColour = colour === 'White' ? 'Black' : 'White';
         this.firstMove = true;
+        this.alive = true;
     }
 
     /**
@@ -35,6 +37,10 @@ class GenericPiece {
                 x: {to: this._x, from: x},
                 y: {to: this._y, from: y}
             });
+            if (getPieces(this.colour)[4].check()) {
+                undoSetBoard();
+                throw new Error('That would be check!');
+            }
             this.firstMove = false;
         } else {
             throw new Error('Piece can\'t move there');

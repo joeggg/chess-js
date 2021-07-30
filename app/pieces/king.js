@@ -1,6 +1,6 @@
 'use strict';
 const { GenericPiece } = require('./piece');
-const { getPieces } = require('../util/board');
+const { getPieces, getChecking } = require('../util/board');
 
 class King extends GenericPiece {
     constructor(x, y, colour) {
@@ -10,10 +10,10 @@ class King extends GenericPiece {
     }
 
     check(x=this._x, y=this._y) {
-        const enemyColour = this.colour === 'Black' ? 'White' : 'Black';
-        const enemyPieces = getPieces(enemyColour);
+        const enemyPieces = getPieces(this.enemyColour);
         for (const piece of enemyPieces) {
-            if (piece.moveAllowed(x, y)) {
+            // console.log(piece.name);
+            if (piece.alive && piece.moveAllowed(x, y)) {
                 return true;
             }
         }
@@ -33,7 +33,15 @@ class King extends GenericPiece {
                 }
             }
         }
-        // TODO: check if piece holding check can be taken
+        console.log('done move check');
+        // Check if piece holding check can be taken
+        const checking = getChecking();
+        console.log(checking);
+        for (const piece of getPieces(this.colour)) {
+            if (piece.alive && piece.moveAllowed(checking._x, checking._y)) {
+                return false;
+            }
+        }
         return true;
     }
 

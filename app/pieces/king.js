@@ -9,17 +9,24 @@ class King extends GenericPiece {
         this.name = 'king';
     }
 
+    /**
+     * Check if any enemy piece can take the king at x, y
+     */
     check(x=this._x, y=this._y) {
         const enemyPieces = getPieces(this.enemyColour);
         for (const piece of enemyPieces) {
-            // console.log(piece.name);
-            if (piece.alive && piece.moveAllowed(x, y)) {
-                return true;
+            if (piece.alive) {
+                if (piece.moveAllowed(x, y)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
+    /**
+     * Check for checkmate!
+     */
     checkmate() {
         const max_x = (this._x === 7) ? 7 : this._x + 1;
         const min_x = (this._x === 0) ? 0 : this._x - 1;
@@ -33,13 +40,13 @@ class King extends GenericPiece {
                 }
             }
         }
-        console.log('done move check');
         // Check if piece holding check can be taken
         const checking = getChecking();
-        console.log(checking);
         for (const piece of getPieces(this.colour)) {
-            if (piece.alive && piece.moveAllowed(checking._x, checking._y)) {
-                return false;
+            if (piece.alive) { 
+                if (piece.moveAllowed(checking._x, checking._y)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -49,12 +56,11 @@ class King extends GenericPiece {
         if (this.sameColour(x, y)) {
             return false;
         }
-        if (this.check(x, y)) {
-            return false;
-        }
         // King can only move to adjacent squares
         if (Math.abs(x-this._x) <=1 &&Math.abs(y-this._y) <= 1) {
-            return true;
+            if (!this.check(x, y)) {
+                return true;
+            }
         }
         return false;
     }

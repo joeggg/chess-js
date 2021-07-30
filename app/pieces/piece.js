@@ -37,6 +37,7 @@ class GenericPiece {
                 x: {to: this._x, from: x},
                 y: {to: this._y, from: y}
             });
+            // Make sure that move didnt put king in check
             if (getPieces(this.colour)[4].check()) {
                 undoSetBoard();
                 throw new Error('That would be check!');

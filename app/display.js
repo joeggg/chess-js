@@ -7,7 +7,7 @@ const { Queen } = require('./pieces/queen');
 const { Rook } = require('./pieces/rook');
 const { Empty } = require('./pieces/empty');
 const { index_to_str } = require('./util/mappings');
-const { board, showNotification, setNotification, setPieces } = require('./util/board');
+const { board, showNotification, setNotification, setupPieces } = require('./util/board');
 
 const SQUARE_WIDTH = 7;
 const SQUARE_HEIGHT = 3;
@@ -87,7 +87,7 @@ function createLayer(y) {
     }
     board.push(getSecondRow('White'));
     board.push(getFirstRow('White'));
-    setPieces();
+    setupPieces();
 }
 
 // Returns the first layer of pieces for each player, depending on the colour input

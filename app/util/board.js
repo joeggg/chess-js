@@ -26,7 +26,7 @@ function getBoard(coord) {
 }
 
 /**
- * Moves a pieces from a starting coord (x.from, y.from) to a new one (x.to, y.to)
+ * Moves a piece from a starting coord (x.from, y.from) to a new one (x.to, y.to)
  *  Updates the notification if a piece was taken
  * 
  * @param {Object} coord 
@@ -47,6 +47,13 @@ function setBoard({x, y}) {
     }
 }
 
+/**
+ * Places a pice into the board object
+ */
+function setPiece(piece) {
+    board[piece._y][piece._x] = piece;
+}
+
 function undoSetBoard() {
     const x = mem.coords.x;
     const y = mem.coords.y;
@@ -63,7 +70,7 @@ function undoSetBoard() {
  * Applies a castling move to the board, assumes path has been checked
  */
 function setCastle(rook_x, y) {
-    const k =  (rook_x === 0) ? 1 : -1;
+    const k = (rook_x === 0) ? 1 : -1;
     const king_x = 4;
     // Swap the empty spaces with the rook and king
     [board[y][rook_x+k], board[y][king_x]] = [board[y][king_x], board[y][rook_x+k]];
@@ -82,7 +89,7 @@ function getPieces(colour) {
 /**
  * Sets up the piece arrays for check
  */
-function setPieces() {
+function setupPieces() {
     pieces.White = [...board[7], ...board[6]];
     pieces.Black = [...board[0], ...board[1]];
 }
@@ -99,7 +106,7 @@ function setChecking(piece) {
  * Print current stored notification to console if there is one
  */
 function showNotification () {
-    if (notification !== '') {
+    if (notification) {
         console.log(notification);
     }
 }
@@ -117,10 +124,11 @@ module.exports = {
     setNotification: setNotification,
     getBoard: getBoard,
     setBoard: setBoard,
+    setPiece: setPiece,
     undoSetBoard: undoSetBoard,
     setCastle: setCastle,
     getPieces: getPieces,
-    setPieces: setPieces,
+    setupPieces: setupPieces,
     getChecking: getChecking,
     setChecking: setChecking,
 };

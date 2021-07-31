@@ -1,6 +1,7 @@
 'use strict';
 const display = require('./display');
 const player = require('./player');
+const { gameOver } = require('./util/config');
 
 // Program entry point, sets up the initial board and starts the game
 function launch() {
@@ -11,12 +12,13 @@ function launch() {
 
 // Main game loop, 2 player only currently
 async function run() {
-    while (true) {
+    while (!gameOver()) {
         try {
             await player.turn('White');
-            // await player.turn('Black');
+            await player.turn('Black');
         } catch(err) {
-            console.log(`${err.message}\nGame Over!`);
+            console.log(`An unexpected error occurred: ${err.message}`);
+            console.log(err.stack);
             break;
         }
     }

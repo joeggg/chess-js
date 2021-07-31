@@ -5,6 +5,7 @@ const display = require('./display');
 const { Empty } = require('./pieces/empty');
 const { Rook } = require('./pieces/rook');
 const { getBoard, getPieces, setChecking } = require('./util/board');
+const config = require('./util/config');
 
 const reader = readline.createInterface({
     input: process.stdin,
@@ -92,14 +93,12 @@ function handleChecks(player, piece) {
     if (getPieces(enemyColour)[4].check()) {    // 4 = king
         setChecking(piece);
         if (getPieces(enemyColour)[4].checkmate()) {
-            throw new Error(`Checkmate ${enemyColour}!`);
+            console.log(`Checkmate ${enemyColour}!`);
+            console.log(`${player} wins!`);
+            config.setGameOver();
+        } else {
+            console.log(`${enemyColour} in check!`);
         }
-        console.log(`${enemyColour} in check!`);
-        check[enemyColour] = true;
-    }
-    // Handle leaving check
-    if (!(getPieces(player)[4].check())) {
-        check[player] = false;
     }
 }
 

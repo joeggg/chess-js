@@ -58,7 +58,9 @@ class King extends GenericPiece {
         }
         // King can only move to adjacent squares
         if (Math.abs(x-this._x) <=1 &&Math.abs(y-this._y) <= 1) {
-            return true;
+            if (!this.check(x, y)) {
+                return true;
+            }
         }
         return false;
     }
